@@ -21,25 +21,44 @@ DEFAULT_MODEL_URL = "https://huggingface.co/ArkanDash/rvc-genshin-impact/resolve
 
 def check_system_status():
     """Returns html describing missing requirements to guide the user."""
-    rvc_status = "<span style='color: green; font-weight: bold;'>✓ Installed</span>" if RVC_AVAILABLE else "<span style='color: red; font-weight: bold;'>✗ Missing (Run setup.bat)</span>"
-    gdrive_status = "<span style='color: green; font-weight: bold;'>✓ Ready</span>" if GDRIVE_LIBS_AVAILABLE else "<span style='color: orange; font-weight: bold;'>⚠ Missing (Optional, install for Drive)</span>"
+    # Connected status badges
+    rvc_status = (
+        "<span style='background-color: rgba(34, 197, 94, 0.15); color: #4ade80; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(74, 222, 128, 0.25); display: inline-flex; align-items: center;'>✓ Installed</span>" 
+        if RVC_AVAILABLE else 
+        "<span style='background-color: rgba(239, 68, 68, 0.15); color: #f87171; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(248, 113, 113, 0.25); display: inline-flex; align-items: center;'>✗ Missing (Run setup.bat)</span>"
+    )
+    
+    gdrive_status = (
+        "<span style='background-color: rgba(34, 197, 94, 0.15); color: #4ade80; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(74, 222, 128, 0.25); display: inline-flex; align-items: center;'>✓ Connected</span>" 
+        if GDRIVE_LIBS_AVAILABLE else 
+        "<span style='background-color: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(251, 191, 36, 0.25); display: inline-flex; align-items: center;'>⚠ Missing API Libs (Local Mode Only)</span>"
+    )
     
     # Check for credentials
-    creds_status = "<span style='color: red; font-weight: bold;'>✗ Missing (Uploads Disabled)</span>"
+    creds_status = "<span style='background-color: rgba(239, 68, 68, 0.15); color: #f87171; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(248, 113, 113, 0.25); display: inline-flex; align-items: center;'>✗ Uploads Disabled</span>"
     if os.path.exists('service_account.json'):
-        creds_status = "<span style='color: green; font-weight: bold;'>✓ Service Account Key Found</span>"
+        creds_status = "<span style='background-color: rgba(34, 197, 94, 0.15); color: #4ade80; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(74, 222, 128, 0.25); display: inline-flex; align-items: center;'>✓ Service Account Key Found</span>"
     elif os.path.exists('token.json'):
-        creds_status = "<span style='color: green; font-weight: bold;'>✓ OAuth Token Found</span>"
+        creds_status = "<span style='background-color: rgba(34, 197, 94, 0.15); color: #4ade80; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(74, 222, 128, 0.25); display: inline-flex; align-items: center;'>✓ OAuth Token Found</span>"
     elif os.path.exists('client_secrets.json'):
-        creds_status = "<span style='color: orange; font-weight: bold;'>✓ Client Secrets Found (Will authenticate on run)</span>"
+        creds_status = "<span style='background-color: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; border: 1px solid rgba(251, 191, 36, 0.25); display: inline-flex; align-items: center;'>✓ Client Secrets Found (Will authenticate on run)</span>"
         
     return f"""
-    <div style='background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 20px;'>
-        <h3 style='margin-top: 0;'>System Requirements Status</h3>
+    <div style='background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); color: #f1f5f9;'>
+        <h3 style='margin-top: 0; color: #818cf8; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; font-weight: 600; font-size: 1.15rem;'>⚡ System Integration Status</h3>
         <ul style='list-style-type: none; padding-left: 0; margin-bottom: 0;'>
-            <li style='margin-bottom: 8px;'>🤖 <b>RVC Inference Engine</b>: {rvc_status}</li>
-            <li style='margin-bottom: 8px;'>📁 <b>Google API Libraries</b>: {gdrive_status}</li>
-            <li style='margin-bottom: 0;'>🔑 <b>Google Drive Credentials</b>: {creds_status}</li>
+            <li style='margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;'>
+                <span>🤖 <b>RVC Voice Engine</b>:</span>
+                <span>{rvc_status}</span>
+            </li>
+            <li style='margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;'>
+                <span>📁 <b>Google API Client</b>:</span>
+                <span>{gdrive_status}</span>
+            </li>
+            <li style='margin-bottom: 0; display: flex; align-items: center; justify-content: space-between;'>
+                <span>🔑 <b>OAuth/Drive Credentials</b>:</span>
+                <span>{creds_status}</span>
+            </li>
         </ul>
     </div>
     """
@@ -85,7 +104,7 @@ def gradio_single_convert(input_audio, model_url, pitch, index_rate, protect, rm
     
     status_msg = "Voice conversion completed successfully!"
     if not res["web_link"]:
-        status_msg += "\nNote: Google Drive upload skipped. Place your 'service_account.json' or 'client_secrets.json' in the workspace folder to enable automated uploads."
+        status_msg += "\nNote: Google Drive upload skipped. Place your 'client_secrets.json' in the workspace folder to enable automated uploads."
         
     return output_audio, status_msg, web_link, direct_link
 
@@ -127,11 +146,93 @@ def gradio_batch_convert(input_dir, model_url, pitch, index_rate, protect, rms_m
     return log_msg, table_data
 
 
-# Build Gradio UI
-with gr.Blocks(title="RVC Voice Conversion Automator", theme=gr.themes.Soft()) as demo:
-    gr.Markdown("""
-    # 🎙️ RVC Male-to-Female Voice Conversion Automator
-    This local pipeline uses Retrieval-based Voice Conversion (RVC) and the Google Drive API to convert male audio to a natural female voice, and upload it automatically to Google Drive.
+# Custom non-intrusive CSS. Does not style global inputs/buttons to keep native components fully functional
+custom_css = """
+body, .gradio-container {
+    background-color: #090d16 !important;
+    background-image: radial-gradient(circle at top, #14113c 0%, #030712 100%) !important;
+}
+
+/* Custom premium hover and glow animations for primary button */
+button.primary-btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+button.primary-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
+    filter: brightness(1.1) !important;
+}
+
+button.primary-btn:active {
+    transform: translateY(1px) !important;
+}
+
+/* Make sure Audio boxes have a solid, distinct outline and clean styling */
+.custom-audio {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(30, 41, 59, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+}
+
+/* Make slider tracks consistent */
+.gradio-slider input[type="range"] {
+    accent-color: #818cf8 !important;
+}
+"""
+
+def toggle_spectral(val):
+    return gr.update(visible=val)
+
+# Configure beautiful native theme variables (retains fully visible controls for complex components)
+custom_theme = gr.themes.Soft(
+    primary_hue="indigo",
+    secondary_hue="violet",
+    neutral_hue="slate"
+).set(
+    # Applies high-contrast colors dynamically
+    body_background_fill="*neutral_950",
+    body_text_color="*neutral_100",
+    
+    background_fill_primary="*neutral_950",
+    background_fill_secondary="*neutral_900",
+    
+    # Block containers (Cards)
+    block_background_fill="rgba(15, 23, 42, 0.5)",
+    block_border_color="rgba(255, 255, 255, 0.08)",
+    block_border_width="1px",
+    block_label_text_color="*neutral_300",
+    block_shadow="0 8px 24px rgba(0, 0, 0, 0.25)",
+    
+    # Input Elements (scoped properly to standard textboxes natively)
+    input_background_fill="rgba(15, 23, 42, 0.6)",
+    input_border_color="rgba(255, 255, 255, 0.12)",
+    
+    # Button styling
+    button_primary_background_fill="linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
+    button_primary_background_fill_hover="linear-gradient(135deg, #4f46e5 0%, #9333ea 100%)",
+    button_primary_text_color="#ffffff",
+)
+
+# Javascript to force client browser to render in dark mode for high-contrast audio UI
+force_dark_mode_js = """
+function() {
+    document.querySelector('body').classList.add('dark');
+}
+"""
+
+# Configure Gradio blocks with custom theme, layout, and CSS
+with gr.Blocks(title="AI Voice Conversion & Uploader", theme=custom_theme, css=custom_css) as demo:
+    
+    # Beautiful Header Card
+    gr.HTML("""
+    <div class="app-header" style="text-align: center; margin-bottom: 30px; padding: 30px 20px; background: rgba(30, 41, 59, 0.25); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); box-shadow: 0 4px 30px rgba(0,0,0,0.2);">
+        <h1 style="font-size: 2.8rem; font-weight: 900; background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 12px 0; letter-spacing: -0.8px;">🎙️ AI Voice Conversion & Uploader</h1>
+        <p style="color: #94a3b8; font-size: 1.15rem; max-width: 650px; margin: 0 auto; line-height: 1.6; font-weight: 400;">
+            Convert male voice recordings to high-fidelity, expressive female vocals locally, and auto-upload directly to Google Drive with shareable links.
+        </p>
+    </div>
     """)
     
     # System status component
@@ -139,71 +240,87 @@ with gr.Blocks(title="RVC Voice Conversion Automator", theme=gr.themes.Soft()) a
     
     with gr.Tabs():
         # TAB 1: Single Audio File Conversion
-        with gr.TabItem("Single File Conversion"):
+        with gr.TabItem("⚡ Single File Conversion"):
             with gr.Row():
-                with gr.Column():
-                    gr.Markdown("### 1. Upload Male Audio")
-                    audio_input = gr.Audio(type="filepath", label="Source Audio (Male)")
+                # Input Controls Column
+                with gr.Column(scale=11):
+                    with gr.Group():
+                        gr.Markdown("### 📂 1. Source Audio Input")
+                        audio_input = gr.Audio(type="filepath", label="Source Audio (Male)", elem_classes=["custom-audio"])
                     
-                    gr.Markdown("### 2. Configure RVC parameters")
-                    model_url_input = gr.Textbox(
-                        value=DEFAULT_MODEL_URL,
-                        label="Hugging Face Model Link (.zip)",
-                        placeholder="Leave blank for default female voice model"
-                    )
+                    with gr.Group():
+                        gr.Markdown("### ⚙️ 2. Core Configurations")
+                        model_url_input = gr.Textbox(
+                            value=DEFAULT_MODEL_URL,
+                            label="Hugging Face RVC Model (.zip)",
+                            placeholder="Leave blank to use default Voice Model"
+                        )
+                        gdrive_folder = gr.Textbox(
+                            value="",
+                            label="Google Drive Folder ID (Optional)",
+                            placeholder="Leave blank to upload to root folder"
+                        )
                     
-                    with gr.Row():
-                        pitch_shift = gr.Slider(minimum=-24, maximum=24, value=13, step=1, label="Pitch Shift (Octave Up = +12)")
-                        index_rate = gr.Slider(minimum=0.0, maximum=1.0, value=0.5, step=0.05, label="Index Rate (Timbre Influence)")
+                    with gr.Group():
+                        gr.Markdown("### 🎛️ 3. RVC Voice Synthesis Tuning")
+                        with gr.Row():
+                            pitch_shift = gr.Slider(minimum=-24, maximum=24, value=13, step=1, label="Pitch Shift (Default: +13 for Male-to-Female)")
+                            index_rate = gr.Slider(minimum=0.0, maximum=1.0, value=0.5, step=0.05, label="Index Rate (Timbre Strength)")
+                            
+                        with gr.Row():
+                            protect_rate = gr.Slider(
+                                minimum=0.0, maximum=0.5, value=0.33, step=0.05, 
+                                label="Consonant/Breath Protection (Keep natural whispers)"
+                            )
+                            rms_mix_rate = gr.Slider(
+                                minimum=0.0, maximum=1.0, value=0.25, step=0.05, 
+                                label="RMS Mix Rate (Volume Profile)"
+                            )
+                    
+                    with gr.Group():
+                        gr.Markdown("### 🎚️ 4. Audio Quality & Preprocessing")
+                        with gr.Row():
+                            spectral_denoise = gr.Checkbox(
+                                value=True,
+                                label="Enable Spectral Noise Subtraction"
+                            )
+                            spectral_denoise_threshold = gr.Slider(
+                                minimum=0.0, maximum=5.0, value=2.5, step=0.1,
+                                label="Denoise Intensity (Threshold multiplier)"
+                            )
                         
-                    with gr.Row():
-                        protect_rate = gr.Slider(
-                            minimum=0.0, maximum=0.5, value=0.33, step=0.05, 
-                            label="Consonant/Breath Protection (Keep breaths natural)"
-                        )
-                        rms_mix_rate = gr.Slider(
-                            minimum=0.0, maximum=1.0, value=0.25, step=0.05, 
-                            label="RMS Mix Rate (Volume Envelope Influence)"
-                        )
+                        with gr.Row():
+                            noise_gate_db = gr.Slider(
+                                minimum=-100.0, maximum=-30.0, value=-50.0, step=1.0, 
+                                label="Noise Gate Threshold (dB, -100 to disable)"
+                            )
+                            normalize_db = gr.Slider(
+                                minimum=-12.0, maximum=0.0, value=-3.0, step=0.5, 
+                                label="Output Peak Normalization (dB)"
+                            )
                     
-                    with gr.Row():
-                        spectral_denoise = gr.Checkbox(
-                            value=True,
-                            label="Spectral Noise Reduction (Recommended for ASMR)"
-                        )
-                        spectral_denoise_threshold = gr.Slider(
-                            minimum=0.0, maximum=5.0, value=2.5, step=0.1,
-                            label="Spectral Noise Threshold (Default 2.5)"
-                        )
-
-                    with gr.Row():
-                        noise_gate_db = gr.Slider(
-                            minimum=-100.0, maximum=-30.0, value=-50.0, step=1.0, 
-                            label="Noise Gate Threshold (dB, -100 to disable if using Spectral)"
-                        )
-                        normalize_db = gr.Slider(
-                            minimum=-12.0, maximum=0.0, value=-3.0, step=0.5, 
-                            label="Output Peak Normalization (dB, 0.0 to skip)"
-                        )
+                    btn_convert = gr.Button("Convert & Upload 🚀", variant="primary", elem_classes=["primary-btn"])
                     
-                    gdrive_folder = gr.Textbox(
-                        value="",
-                        label="Google Drive Folder ID (Optional)",
-                        placeholder="Leave blank to upload to root folder"
-                    )
-                    
-                    btn_convert = gr.Button("Convert & Upload", variant="primary")
-                    
-                with gr.Column():
-                    gr.Markdown("### 3. Output Waveform (Female)")
-                    audio_output = gr.Audio(type="filepath", label="Converted Audio (Female)")
-                    
-                    gr.Markdown("### 4. Status & Shareable Links")
-                    status_output = gr.Textbox(label="Status Log", interactive=False)
-                    
-                    web_link_output = gr.Textbox(label="Google Drive Web View Link", interactive=True)
-                    direct_link_output = gr.Textbox(label="Google Drive Direct Download Link", interactive=True)
-                    
+                # Output column
+                with gr.Column(scale=9):
+                    with gr.Group():
+                        gr.Markdown("### 🎧 5. Output Preview (Female)")
+                        audio_output = gr.Audio(type="filepath", label="Converted Audio (Female)", elem_classes=["custom-audio"])
+                        
+                    with gr.Group():
+                        gr.Markdown("### 📊 6. Job Log & Shareable Links")
+                        status_output = gr.Textbox(label="Status Log", interactive=False)
+                        
+                        web_link_output = gr.Textbox(label="Google Drive Web View Link", interactive=True)
+                        direct_link_output = gr.Textbox(label="Google Drive Direct Download Link", interactive=True)
+            
+            # Interactive toggle for spectral denoise threshold
+            spectral_denoise.change(
+                fn=toggle_spectral,
+                inputs=spectral_denoise,
+                outputs=spectral_denoise_threshold
+            )
+            
             btn_convert.click(
                 fn=gradio_single_convert,
                 inputs=[audio_input, model_url_input, pitch_shift, index_rate, protect_rate, rms_mix_rate, noise_gate_db, normalize_db, gdrive_folder, spectral_denoise, spectral_denoise_threshold],
@@ -211,66 +328,81 @@ with gr.Blocks(title="RVC Voice Conversion Automator", theme=gr.themes.Soft()) a
             )
             
         # TAB 2: Batch Directory Conversion
-        with gr.TabItem("Batch Conversion"):
+        with gr.TabItem("📦 Batch Folder Processing"):
             with gr.Row():
-                with gr.Column():
-                    gr.Markdown("### Batch Processing Configuration")
-                    input_folder = gr.Textbox(
-                        value="inputs",
-                        label="Inputs Directory Path",
-                        placeholder="Path to folder containing audio files"
-                    )
-                    
-                    batch_model_url = gr.Textbox(
-                        value=DEFAULT_MODEL_URL,
-                        label="Hugging Face Model Link (.zip)"
-                    )
-                    
-                    with gr.Row():
-                        batch_pitch = gr.Slider(minimum=-24, maximum=24, value=13, step=1, label="Pitch Shift")
-                        batch_index = gr.Slider(minimum=0.0, maximum=1.0, value=0.5, step=0.05, label="Index Rate")
-                        
-                    with gr.Row():
-                        batch_protect = gr.Slider(minimum=0.0, maximum=0.5, value=0.33, step=0.05, label="Consonant/Breath Protection")
-                        batch_rms = gr.Slider(minimum=0.0, maximum=1.0, value=0.25, step=0.05, label="RMS Mix Rate")
-                    
-                    with gr.Row():
-                        batch_spectral_denoise = gr.Checkbox(
-                            value=True,
-                            label="Spectral Noise Reduction (Recommended for ASMR)"
+                with gr.Column(scale=11):
+                    with gr.Group():
+                        gr.Markdown("### 📁 Batch Processing Settings")
+                        input_folder = gr.Textbox(
+                            value="inputs",
+                            label="Inputs Directory Path (Local folder)",
+                            placeholder="Path to folder containing audio files"
                         )
-                        batch_spectral_threshold = gr.Slider(
-                            minimum=0.0, maximum=5.0, value=2.5, step=0.1,
-                            label="Spectral Noise Threshold (Default 2.5)"
+                        batch_model_url = gr.Textbox(
+                            value=DEFAULT_MODEL_URL,
+                            label="Hugging Face Model Link (.zip)"
                         )
-
-                    with gr.Row():
-                        batch_noise_gate = gr.Slider(minimum=-100.0, maximum=-30.0, value=-50.0, step=1.0, label="Noise Gate Threshold (dB, -100 to disable)")
-                        batch_normalize = gr.Slider(minimum=-12.0, maximum=0.0, value=-3.0, step=0.5, label="Output Normalization (dB)")
+                        batch_folder_id = gr.Textbox(
+                            value="", 
+                            label="Google Drive Folder ID (Optional)"
+                        )
                         
-                    batch_folder_id = gr.Textbox(value="", label="Google Drive Folder ID (Optional)")
+                    with gr.Group():
+                        gr.Markdown("### 🎛️ RVC Parameters")
+                        with gr.Row():
+                            batch_pitch = gr.Slider(minimum=-24, maximum=24, value=13, step=1, label="Pitch Shift")
+                            batch_index = gr.Slider(minimum=0.0, maximum=1.0, value=0.5, step=0.05, label="Index Rate")
+                            
+                        with gr.Row():
+                            batch_protect = gr.Slider(minimum=0.0, maximum=0.5, value=0.33, step=0.05, label="Consonant/Breath Protection")
+                            batch_rms = gr.Slider(minimum=0.0, maximum=1.0, value=0.25, step=0.05, label="RMS Mix Rate")
                     
-                    btn_batch = gr.Button("Start Batch Pipeline", variant="primary")
+                    with gr.Group():
+                        gr.Markdown("### 🎚️ Audio Processing")
+                        with gr.Row():
+                            batch_spectral_denoise = gr.Checkbox(
+                                value=True,
+                                label="Enable Spectral Noise Subtraction"
+                            )
+                            batch_spectral_threshold = gr.Slider(
+                                minimum=0.0, maximum=5.0, value=2.5, step=0.1,
+                                label="Denoise Intensity"
+                            )
+                        
+                        with gr.Row():
+                            batch_noise_gate = gr.Slider(minimum=-100.0, maximum=-30.0, value=-50.0, step=1.0, label="Noise Gate Threshold (dB)")
+                            batch_normalize = gr.Slider(minimum=-12.0, maximum=0.0, value=-3.0, step=0.5, label="Output Normalization (dB)")
+                        
+                    btn_batch = gr.Button("Start Batch Pipeline ⚙️", variant="primary", elem_classes=["primary-btn"])
                     
-                with gr.Column():
-                    gr.Markdown("### Batch Conversion Log")
-                    batch_status = gr.Textbox(label="Execution Log", interactive=False, lines=6)
-                    
-                    gr.Markdown("### Batch Results Table")
-                    results_table = gr.Dataframe(
-                        headers=["Filename", "Conversion Status", "Google Drive Link"],
-                        datatype=["str", "str", "str"],
-                        label="Processed Files"
-                    )
-                    
+                with gr.Column(scale=9):
+                    with gr.Group():
+                        gr.Markdown("### 📊 Execution Log")
+                        batch_status = gr.Textbox(label="Execution Log", interactive=False, lines=6)
+                        
+                    with gr.Group():
+                        gr.Markdown("### 📋 Processed Files List")
+                        results_table = gr.Dataframe(
+                            headers=["Filename", "Conversion Status", "Google Drive Link"],
+                            datatype=["str", "str", "str"],
+                            label="Processed Files"
+                        )
+            
+            # Interactive toggle for batch spectral denoise threshold
+            batch_spectral_denoise.change(
+                fn=toggle_spectral,
+                inputs=batch_spectral_denoise,
+                outputs=batch_spectral_threshold
+            )
+            
             btn_batch.click(
                 fn=gradio_batch_convert,
                 inputs=[input_folder, batch_model_url, batch_pitch, batch_index, batch_protect, batch_rms, batch_noise_gate, batch_normalize, batch_folder_id, batch_spectral_denoise, batch_spectral_threshold],
                 outputs=[batch_status, results_table]
             )
             
-    # Refresh system requirements status when page loads
-    demo.load(fn=check_system_status, outputs=status_html)
+    # Force client browser to render in dark mode on page load & refresh system status
+    demo.load(fn=check_system_status, outputs=status_html, js=force_dark_mode_js)
 
 if __name__ == "__main__":
     demo.launch(server_name="127.0.0.1", server_port=7860, share=False)
