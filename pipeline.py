@@ -462,7 +462,7 @@ def convert_voice(input_path, output_path, model_pth, model_index, pitch_shift=1
     return result
 
 
-def process_audio_pipeline(input_path, model_url=None, pitch_shift=13, index_rate=0.5, protect_index=0.33, rms_mix_rate=0.25, noise_gate_db=-50.0, normalize_db=-3.0, folder_id=None, spectral_denoise=True, spectral_denoise_threshold=2.5):
+def process_audio_pipeline(input_path, model_url=None, pitch_shift=13, index_rate=0.5, protect_index=0.33, rms_mix_rate=0.25, noise_gate_db=-100.0, normalize_db=-3.0, folder_id=None, spectral_denoise=False, spectral_denoise_threshold=2.5):
     """Integrates downloading models, voice conversion, and drive upload."""
     global RVC_AVAILABLE, GDRIVE_LIBS_AVAILABLE
     
@@ -624,12 +624,12 @@ if __name__ == "__main__":
     parser.add_argument("--index_rate", type=float, default=0.5, help="Retrieval index influence rate, 0.0-1.0 (default: 0.5)")
     parser.add_argument("--protect", type=float, default=0.33, help="Voiceless consonant and breath protection index, 0.0-0.5 (default: 0.33)")
     parser.add_argument("--rms_mix_rate", type=float, default=0.25, help="RMS mix rate, 0.0-1.0 (default: 0.25)")
-    parser.add_argument("--noise_gate_db", type=float, default=-50.0, help="Noise gate threshold in dB (set to -100 to disable, default: -50.0)")
+    parser.add_argument("--noise_gate_db", type=float, default=-100.0, help="Noise gate threshold in dB (set to -100 to disable, default: -100.0)")
     parser.add_argument("--normalize_db", type=float, default=-3.0, help="Peak normalization in dB (set to 0.0 to skip, default: -3.0)")
     parser.add_argument("--folder_id", type=str, default=None, help="Optional Google Drive folder ID to upload files directly to")
-    parser.add_argument("--no_spectral_denoise", dest="spectral_denoise", action="store_false", help="Bypass the high-quality spectral noise reduction")
+    parser.add_argument("--spectral_denoise", action="store_true", help="Enable the high-quality spectral noise reduction")
     parser.add_argument("--spectral_denoise_threshold", type=float, default=2.5, help="Spectral noise subtraction threshold multiplier (default: 2.5)")
-    parser.set_defaults(spectral_denoise=True)
+    parser.set_defaults(spectral_denoise=False)
     
     args = parser.parse_args()
     

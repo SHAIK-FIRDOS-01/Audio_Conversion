@@ -281,7 +281,7 @@ with gr.Blocks(title="AI Voice Conversion & Uploader", theme=custom_theme, css=c
                         gr.Markdown("### 🎚️ 4. Audio Quality & Preprocessing")
                         with gr.Row():
                             spectral_denoise = gr.Checkbox(
-                                value=True,
+                                value=False,
                                 label="Enable Spectral Noise Subtraction"
                             )
                             spectral_denoise_threshold = gr.Slider(
@@ -291,7 +291,7 @@ with gr.Blocks(title="AI Voice Conversion & Uploader", theme=custom_theme, css=c
                         
                         with gr.Row():
                             noise_gate_db = gr.Slider(
-                                minimum=-100.0, maximum=-30.0, value=-50.0, step=1.0, 
+                                minimum=-100.0, maximum=-30.0, value=-100.0, step=1.0, 
                                 label="Noise Gate Threshold (dB, -100 to disable)"
                             )
                             normalize_db = gr.Slider(
@@ -361,7 +361,7 @@ with gr.Blocks(title="AI Voice Conversion & Uploader", theme=custom_theme, css=c
                         gr.Markdown("### 🎚️ Audio Processing")
                         with gr.Row():
                             batch_spectral_denoise = gr.Checkbox(
-                                value=True,
+                                value=False,
                                 label="Enable Spectral Noise Subtraction"
                             )
                             batch_spectral_threshold = gr.Slider(
@@ -370,7 +370,7 @@ with gr.Blocks(title="AI Voice Conversion & Uploader", theme=custom_theme, css=c
                             )
                         
                         with gr.Row():
-                            batch_noise_gate = gr.Slider(minimum=-100.0, maximum=-30.0, value=-50.0, step=1.0, label="Noise Gate Threshold (dB)")
+                            batch_noise_gate = gr.Slider(minimum=-100.0, maximum=-30.0, value=-100.0, step=1.0, label="Noise Gate Threshold (dB)")
                             batch_normalize = gr.Slider(minimum=-12.0, maximum=0.0, value=-3.0, step=0.5, label="Output Normalization (dB)")
                         
                     btn_batch = gr.Button("Start Batch Pipeline ⚙️", variant="primary", elem_classes=["primary-btn"])
