@@ -15,9 +15,8 @@ if %errorlevel% neq 0 (
 
 :: Create virtual environment if it doesn't exist
 if not exist "venv" (
-    echo [INFO] Creating Python virtual environment (venv)...
-    python -m venv venv
-    if %errorlevel% neq 0 (
+    echo [INFO] Creating Python virtual environment venv...
+    python -m venv venv || (
         echo [ERROR] Failed to create virtual environment!
         pause
         exit /b 1
