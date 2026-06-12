@@ -40,7 +40,7 @@ python -m pip install torch torchaudio --index-url https://download.pytorch.org/
 
 :: Install precompiled fairseq to avoid Windows compilation issues (Python 3.10 specific)
 echo [INFO] Installing precompiled fairseq for Windows...
-python -m pip install https://github.com/BlueAmulet/fairseq-win-whl/releases/download/v0.12.2/fairseq-0.12.2-cp310-cp310-win_amd64.whl
+python -m pip install https://github.com/BlueAmulet/fairseq-win-whl/releases/download/ci_build/fairseq-0.12.2-cp310-cp310-win_amd64.whl
 
 :: Install core dependencies
 echo [INFO] Installing RVC, Gradio, and Google APIs...
