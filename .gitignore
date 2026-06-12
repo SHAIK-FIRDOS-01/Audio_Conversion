@@ -1,0 +1,37 @@
+# Virtual environment
+venv/
+.venv/
+Env/
+env/
+
+# RVC Models (Downloaded automatically on first run)
+models/
+
+# Local Inputs/Outputs
+inputs/
+outputs/
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.ogg
+*.zip
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Google Drive credentials & tokens (sensitive local files)
+token.json
+service_account.json
+client_secrets.json
+
+# IDE config files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
